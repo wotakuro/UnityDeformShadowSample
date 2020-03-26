@@ -1,5 +1,7 @@
 // Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
 
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "Unlit/SimpleShadow"
 {
     Properties
@@ -70,9 +72,9 @@ Shader "Unlit/SimpleShadow"
 			Blend SrcAlpha OneMinusSrcAlpha
 
 			Stencil {
-				Ref 0
-				Comp Equal
-				Pass IncrSat
+				Ref 100
+				Comp NotEqual
+				Pass Replace
 			}
 
 			CGPROGRAM
@@ -89,6 +91,7 @@ Shader "Unlit/SimpleShadow"
 			struct v2f
 			{
 				float4 vertex : SV_POSITION;
+				float2 info:TEXCOORD0;
 			};
 
 			uniform float4x4 _DeformMatrix;
@@ -101,12 +104,19 @@ Shader "Unlit/SimpleShadow"
 				float4 vert = mul(_DeformMatrix, v.vertex);
 				o.vertex = mul(UNITY_MATRIX_VP,vert);
 
+				float4 originPos = mul(unity_ObjectToWorld,v.vertex);
+
+
+				o.info = float2(originPos.x,originPos.y);
 				return o;
 			}
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				return _DeformShadowColor;
+				clip(i.info.y - _ShadowOffsetY);
+				fixed4 color = _DeformShadowColor;
+//				color.a = color.a * saturate( (i.info.y - _ShadowOffsetY)*1000 );
+				return color;
 			}
 		ENDCG
 	}

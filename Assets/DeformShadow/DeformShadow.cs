@@ -8,11 +8,9 @@ public class DeformShadow : MonoBehaviour
     private struct RenderingInfo
     {
         public Renderer targetRenderer;
-        public Transform trans;
         public RenderingInfo(Renderer r)
         {
             this.targetRenderer = r;
-            this.trans = r.transform;
         }
     }
     private static int _DeformMatrixPropId = Shader.PropertyToID("_DeformMatrix");
@@ -30,7 +28,7 @@ public class DeformShadow : MonoBehaviour
 
     void SetToRenderer(Renderer targetRenderer)
     {
-        var mat = targetRenderer.transform.localToWorldMatrix;
+        var mat = targetRenderer.localToWorldMatrix;
         mat.m13 -= groundOffsetY;
 
         var finalMat = this.shadowMatrix  * mat;
