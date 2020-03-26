@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.42670915, g: 0.45958257, b: 0.48669273, a: 1}
+  m_IndirectSpecularColor: {r: 0.39515644, g: 0.41211596, b: 0.40652657, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -266,13 +266,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 78381576}
-  m_LocalRotation: {x: 0.11850573, y: -0.91940254, z: 0.11289306, w: -0.35764602}
+  m_LocalRotation: {x: -0.11424961, y: 0.6071955, z: 0.117198914, w: -0.77751213}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 7.0550003, y: -223.6, z: -17.514}
+  m_LocalEulerAnglesHint: {x: 2.025, y: -436.31, z: -18.735}
 --- !u!1 &449447188
 GameObject:
   m_ObjectHideFlags: 0
@@ -449,13 +449,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729863965}
-  m_LocalRotation: {x: 0.017034056, y: -0.98295987, z: 0.13115488, w: 0.12766428}
-  m_LocalPosition: {x: -0, y: 0.1, z: -0.03}
+  m_LocalRotation: {x: 0.33593154, y: 0.32196933, z: -0.8765035, w: 0.12339898}
+  m_LocalPosition: {x: -0, y: -0.1, z: -0.03}
   m_LocalScale: {x: 10, y: 0.01, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 15.2, y: -165.2, z: 0}
+  m_LocalEulerAnglesHint: {x: -220.34, y: -221.94, z: 0}
 --- !u!1 &1004216702
 GameObject:
   m_ObjectHideFlags: 0
@@ -567,10 +567,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3edfde5d930e624fa6fc38d66472224, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundOffsetY: 0.11
-  shadowColor: {r: 0, g: 0, b: 0, a: 0.5}
-  lightDir: {x: 0.68439823, y: -0.12282212, z: -0.71868926}
-  groundNormalVector: {x: -0.06697518, y: 0.9650165, z: -0.2534907}
+  groundOffsetY: -0.09
+  shadowColor: {r: 0, g: 0, b: 0, a: 0.23137255}
+  lightDir: {x: -0.9709836, y: -0.0353356, z: 0.2365213}
+  groundNormalVector: {x: 0.4326386, y: -0.7622169, z: -0.48150727}
 --- !u!114 &1004216708
 MonoBehaviour:
   m_ObjectHideFlags: 0

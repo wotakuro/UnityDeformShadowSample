@@ -26,14 +26,16 @@ public class DeformShadow : MonoBehaviour
     public float groundOffsetY = 0;
     public Color shadowColor = new Color(0, 0, 0, 0.5f);
     public Vector3 lightDir = Vector3.forward;
-    // todo
     public Vector3 groundNormalVector = Vector3.up;
 
     void SetToRenderer(Renderer targetRenderer)
     {
         var mat = targetRenderer.transform.localToWorldMatrix;
         mat.m13 -= groundOffsetY;
+
         var finalMat = this.shadowMatrix  * mat;
+            
+
         propertyBlock.SetMatrix(_DeformMatrixPropId, finalMat);
         targetRenderer.SetPropertyBlock(propertyBlock);
     }
@@ -47,6 +49,8 @@ public class DeformShadow : MonoBehaviour
 
         propertyBlock.SetFloat(_ShadowOffsetYPropId, groundOffsetY);
         propertyBlock.SetColor(_DeformShadowColorPropId, this.shadowColor);
+
+
     }
 
     private void SetupShadowMatrix()
@@ -58,8 +62,10 @@ public class DeformShadow : MonoBehaviour
         shadowMatrix.m02 = 0;
         shadowMatrix.m03 = 0;
 
-        shadowMatrix.m10 = shadowMatrix.m11 = shadowMatrix.m12 = 0.0f;
-        shadowMatrix.m13 = groundOffsetY;
+        shadowMatrix.m10 = 0;
+        shadowMatrix.m11 = 0;
+        shadowMatrix.m12 = 0;
+        shadowMatrix.m13 = 0;
 
         shadowMatrix.m20 = 0;
         shadowMatrix.m21 = forward.z;
@@ -67,8 +73,14 @@ public class DeformShadow : MonoBehaviour
         shadowMatrix.m23 = 0;
 
         shadowMatrix.m30 = shadowMatrix.m31 = shadowMatrix.m32 = 0.0f;
-
         shadowMatrix.m33 = 1;
+
+        var rot = Quaternion.FromToRotation(Vector3.up, this.groundNormalVector);
+        var groundMatrix = Matrix4x4.Rotate(rot);
+
+        shadowMatrix.m13 = groundOffsetY;
+
+        shadowMatrix = groundMatrix * shadowMatrix;
     }
 
 
