@@ -13,5 +13,7 @@ public class ShadowParameterUpdate : MonoBehaviour
     {
         deformShadow.lightDir = light.transform.forward;
         deformShadow.groundOffsetY = ground.position.y + 0.01f;
+
+        deformShadow.groundNormalVector = ground.transform.up;
     }
 }

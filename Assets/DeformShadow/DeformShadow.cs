@@ -8,6 +8,12 @@ public class DeformShadow : MonoBehaviour
     private struct RenderingInfo
     {
         public Renderer targetRenderer;
+        public Transform trans;
+        public RenderingInfo(Renderer r)
+        {
+            this.targetRenderer = r;
+            this.trans = r.transform;
+        }
     }
     private static int _DeformMatrixPropId = Shader.PropertyToID("_DeformMatrix");
     private static int _ShadowOffsetYPropId = Shader.PropertyToID("_ShadowOffsetY");
@@ -15,79 +21,64 @@ public class DeformShadow : MonoBehaviour
 
     private List<RenderingInfo> renderInfos;
     private MaterialPropertyBlock propertyBlock;
-    public Matrix4x4 matrix = Matrix4x4.identity;
+    private Matrix4x4 shadowMatrix = Matrix4x4.identity;
 
     public float groundOffsetY = 0;
     public Color shadowColor = new Color(0, 0, 0, 0.5f);
     public Vector3 lightDir = Vector3.forward;
-
     // todo
-//    public Vector3 groundNormalVector = Vector3.zero;
+    public Vector3 groundNormalVector = Vector3.up;
 
     void SetToRenderer(Renderer targetRenderer)
     {
+        var mat = targetRenderer.transform.localToWorldMatrix;
+        mat.m13 -= groundOffsetY;
+        var finalMat = this.shadowMatrix  * mat;
+        propertyBlock.SetMatrix(_DeformMatrixPropId, finalMat);
         targetRenderer.SetPropertyBlock(propertyBlock);
     }
 
     private void SetupPropertyBlock()
     { 
-
         if (propertyBlock == null)
         {
             propertyBlock = new MaterialPropertyBlock();
         }
 
-
-
-        Vector3 forward = lightDir;
-
-
-        matrix.m00 = 1;
-        matrix.m01 = forward.x;
-        matrix.m02 = 0;
-
-        matrix.m10 = matrix.m11 = matrix.m12 = 0.0f;
-
-        matrix.m20 = 0;
-        matrix.m21 = forward.z;
-        matrix.m22 = 1;
-
-        matrix.m13 = groundOffsetY;
-
-        propertyBlock.SetMatrix(_DeformMatrixPropId, matrix);
         propertyBlock.SetFloat(_ShadowOffsetYPropId, groundOffsetY);
         propertyBlock.SetColor(_DeformShadowColorPropId, this.shadowColor);
     }
 
-    /*
-    private Matrix4x4 CreateGroundMatrix(Vector3 normal)
+    private void SetupShadowMatrix()
     {
-        normal.Normalize();
-        Vector3 forward = new Vector3(-normal.x,normal.z,normal.y);
-        Vector3 crossForward = new Vector3(forward.z,forward.y,-forward.x);
-        Matrix4x4 matrix = Matrix4x4.identity;
-        
-        matrix.m00 = crossForward.x;
-        matrix.m01 = crossForward.y;
-        matrix.m02 = crossForward.z;
-        matrix.m10 = normal.x;
-        matrix.m11 = normal.y;
-        matrix.m12 = normal.z;
-        matrix.m20 = forward.x;
-        matrix.m21 = forward.y;
-        matrix.m22 = forward.z;
+        Vector3 forward = lightDir;
 
-        return matrix;
+        shadowMatrix.m00 = 1;
+        shadowMatrix.m01 = forward.x;
+        shadowMatrix.m02 = 0;
+        shadowMatrix.m03 = 0;
+
+        shadowMatrix.m10 = shadowMatrix.m11 = shadowMatrix.m12 = 0.0f;
+        shadowMatrix.m13 = groundOffsetY;
+
+        shadowMatrix.m20 = 0;
+        shadowMatrix.m21 = forward.z;
+        shadowMatrix.m22 = 1;
+        shadowMatrix.m23 = 0;
+
+        shadowMatrix.m30 = shadowMatrix.m31 = shadowMatrix.m32 = 0.0f;
+
+        shadowMatrix.m33 = 1;
     }
-    */
+
 
 
     private void Start()
     {
-        SetupInfo();
+        Initialize();
     }
 
-    private void SetupInfo()
+    private void Initialize()
     {
         var renderers = this.GetComponentsInChildren<Renderer>();
         if (renderers == null) { return; }
@@ -101,8 +92,7 @@ public class DeformShadow : MonoBehaviour
         }
         foreach (var r in renderers)
         {
-            RenderingInfo info = new RenderingInfo();
-            info.targetRenderer = r;
+            RenderingInfo info = new RenderingInfo(r);
             renderInfos.Add(info);
         }
 
@@ -115,6 +105,7 @@ public class DeformShadow : MonoBehaviour
         if(renderInfos != null)
         {
             SetupPropertyBlock();
+            SetupShadowMatrix();
             foreach ( var info in renderInfos)
             {
                 SetToRenderer(info.targetRenderer);
@@ -123,7 +114,7 @@ public class DeformShadow : MonoBehaviour
 #if UNITY_EDITOR
         else
         {
-            SetupInfo();
+            Initialize();
         }
 #endif
     }
