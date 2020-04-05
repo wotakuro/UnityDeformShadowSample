@@ -28,9 +28,11 @@ public class DeformShadow : MonoBehaviour
 
     void SetToRenderer(Renderer targetRenderer)
     {
+        /* CPU ‘¤‚ÅŒvZ‚·‚é‚È‚çc
+         * ‚½‚¾SkinnedMeshRednerer‚Ìê‡‚¤‚Ü‚­‚¢‚©‚È‚¢‚Ì‚Åc
         var mat = targetRenderer.localToWorldMatrix;
         mat.m13 -= groundOffsetY;
-
+        */
         var finalMat = this.shadowMatrix;// * mat;
             
 
