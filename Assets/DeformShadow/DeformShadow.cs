@@ -31,7 +31,7 @@ public class DeformShadow : MonoBehaviour
         var mat = targetRenderer.localToWorldMatrix;
         mat.m13 -= groundOffsetY;
 
-        var finalMat = this.shadowMatrix  * mat;
+        var finalMat = this.shadowMatrix;// * mat;
             
 
         propertyBlock.SetMatrix(_DeformMatrixPropId, finalMat);

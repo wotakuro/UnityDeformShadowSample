@@ -100,13 +100,22 @@ Shader "Unlit/SimpleShadow"
 
 			v2f vert(appdata v)
 			{
+				/*
 				v2f o;
 				float4 vert = mul(_DeformMatrix, v.vertex);
 				o.vertex = mul(UNITY_MATRIX_VP,vert);
-
 				float4 originPos = mul(unity_ObjectToWorld,v.vertex);
-
-
+				o.info = float2(originPos.x,originPos.y);
+				return o;
+				*/
+				v2f o;
+				float4x4 modelMatrix = unity_ObjectToWorld;
+				modelMatrix[1][3] -= _ShadowOffsetY;// = mul(unity_ObjectToWorld, offsetMatrix);
+				float4x4 mat = mul(_DeformMatrix, modelMatrix);
+				float4 vert = mul(mat, v.vertex);
+				o.vertex = mul(UNITY_MATRIX_VP,vert);
+				
+				float4 originPos = mul(unity_ObjectToWorld,v.vertex);
 				o.info = float2(originPos.x,originPos.y);
 				return o;
 			}
